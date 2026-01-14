@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: echo
+  template:
+    metadata:
+      labels:
+        app: echo
+    spec:
+      containers:
+        - name: echo
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /logs
+              while true; do
+                echo "Hello from $(hostname) at $(date)" >> /logs/echo.log
+                sleep 1
+              done
+          volumeMounts:
+            - name: log-volume
+              mountPath: /logs
+      volumes:
+        - name: log-volume
+          persistentVolumeClaim:
+            claimName: log-pvc
