@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: echo
+  template:
+    metadata:
+      labels:
+        app: echo
+    spec:
+      containers:
+      - name: echo
+        image: busybox
+        command:
+          - sh
+          - -c
+          - |
+            # Create readiness and liveness files
+            touch /tmp/ready
+            touch /tmp/healthy
+            # Write logs continuously
+            while true; do
+              echo "Hello from $(hostname) at $(date)"
+              sleep 1
+            done
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          exec:
+            command:
+              - cat
+              - /tmp/healthy
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+              - cat
+              - /tmp/ready
+          initialDelaySeconds: 0
+          periodSeconds: 5
