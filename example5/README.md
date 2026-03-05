@@ -9,8 +9,4 @@ The first step to that is to stablish limits on:
 - How much does an application maximum consumption should be for the well-being of the cluster(**Limits**)
 
 1- Run deployment
-2- Run the `get_resources`
-
-There is two ways we can program K8s applications to handle more load:
-**Vertical Scaling**: Allowing a pod to consume more resources to handle more load.
-**Horizontal Scaling**: Creating more pods as the load increases.
+2- Check how many resources are its requests and limits
